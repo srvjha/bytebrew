@@ -84,7 +84,32 @@ Build an agentic application that provides a live, synthesized, and intelligent 
 ## Getting Started
 
 1. **Install dependencies:**
-
-   ```sh
+   
+sh
    cd backend/functions
    npm install
+
+
+2. **Run locally with emulators:**
+   
+sh
+   npm run serve
+
+
+3. **Deploy to Firebase:**
+   
+sh
+   npm run deploy
+
+
+---
+
+## File Structure Overview
+
+- backend/functions/src/index.ts: Express app entry point, route registration, Firebase initialization.
+- backend/functions/src/routes/report.route.ts: Report submission route.
+- backend/functions/src/controllers/report.controller.ts: Report submission logic.
+- backend/functions/src/schemas/report.schema.ts: Zod schema for report validation.
+- backend/functions/src/types/report.type.ts: TypeScript types for reports.
+- backend/functions/src/utils: API response, error handling, async utilities.
+
