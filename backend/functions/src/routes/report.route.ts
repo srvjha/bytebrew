@@ -1,8 +1,14 @@
-import {Router} from "express";
-import { submitReport } from "../controllers/report.controller";
+import { Router } from 'express';
+import { upload } from '../middleware/multer.middleware';
+import { citizenReporting } from '../controllers/report.controller';
 
 const router = Router();
 
-router.post("/submit-report",submitReport);
+const uploadMiddleware = upload.fields([
+  { name: 'photos', maxCount: 4 },
+  { name: 'videos', maxCount: 2 },
+]);
 
-export default router
+router.post('/submit-report', uploadMiddleware, citizenReporting);
+
+export default router;

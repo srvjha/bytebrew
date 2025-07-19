@@ -1,21 +1,18 @@
-import * as functions from "firebase-functions";
+import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
 import express from "express";
 
-admin.initializeApp(); // ✅ Initialize only once here
+admin.initializeApp({
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET
+});
 
-
-// Connect to emulator only if running locally
 if (process.env.FUNCTIONS_EMULATOR === "true") {
   admin.firestore().settings({
     host: "localhost:8080",
     ssl: false,
   });
 }
-
-
 const app = express();
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -27,9 +24,16 @@ app.get("/health-check", (req, res) => {
   res.send("Firebase server health is up and running 🔥");
 });
 
+
+app.use(express.static("public"));
+
+
 import reportRoutes from "./routes/report.route";
 import { errorHandler } from "./middleware/error.middleware";
+
 app.use("/report", reportRoutes);
 app.use(errorHandler);
 
-export const api = functions.https.onRequest(app);
+export const api = functions
+  .runWith({ memory: '1GB', timeoutSeconds: 540 })
+  .https.onRequest(app);
